@@ -1,0 +1,33 @@
+{
+  "name": "twilio-element",
+  "version": "0.0.1",
+  "authors": [
+    "oss@e107.com.ar"
+  ],
+  "description": "Element wrapper for twilio client",
+  "keywords": [
+    "web-component",
+    "polymer",
+    "twilio"
+  ],
+  "main": "twilio-element.html",
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "homepage": "",
+  "ignore": [
+    "/.*",
+    "/test/",
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.1.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "web-component-tester": "*"
+  },
+  "moduleType": []
+}

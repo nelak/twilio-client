@@ -1,0 +1,131 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="dependencies.html">
+
+<!--
+An element that provides a wrapper over the twilio client functionality
+
+Example:
+
+    <twilio-element></twilio-element>
+
+@group Seed Elements
+@element twilio-element
+@demo demo/index.html
+@hero hero.svg
+-->
+<dom-module id="twilio-element">
+  <template>
+    <style>
+    </style>
+ </template>
+  <script>
+    (function () {
+      'use strict';
+      Polymer({
+        is: 'twilio-element',
+        properties: {
+          /**
+           * Twilio token, needs to be initialized before calling any method
+           */
+          token: {
+            type: String,
+            notify: true,
+            observer: '_initialize'
+          },
+          /**
+           * Twilio client should output debug information
+           */
+          debug: {
+            type: Boolean,
+            notify: true
+          },
+          /**
+           * Twilio client connection options
+           */
+          options: {
+            type: Object,
+            notify: true
+          }
+        },
+
+        // Element Lifecycle
+        ready: function(){
+          var self = this;
+
+          this.options = this.options || {};
+
+          // Register an event handler to be called when twilio is ready
+          Twilio.Device.ready(function() {
+             self.fire('ready');
+          });
+
+          // Register an event handler to be called when there is an error
+          Twilio.Device.error(function(error) {
+            self.fire('error', error);
+          });
+
+          // Register an event handler to be called when there is an incoming call
+          Twilio.Device.incoming(function(connection) {
+            self.fire('incoming', connection);
+          });
+
+          // Register an event handler for when a call ends for any reason
+          Twilio.Device.disconnect(function(connection) {
+            self.fire('disconnected', connection);
+          });
+        },
+
+        // Element Behavior
+
+        /**
+         * Disconnect from twilio
+         */
+        disconnect: function(){
+          Twilio.Device.disconnectAll();
+        },
+
+        /**
+         * Connect to twilio
+         * @param {Object} options Optional connection options
+         */
+        connect: function(options){
+          options = options || this.options;
+          Twilio.Device.connect(options);
+        },
+
+        _initialize: function (value) {
+          this.options.debug = this.debug;
+          Twilio.Device.setup(this.token, this.options);
+        }
+
+        /**
+         * The `twilio-element-ready` event is fired whenever twilio `ready` is raised.
+         *
+         * @event twilio-element-ready
+         */
+
+         /**
+          * The `twilio-element-error` event is fired whenever twilio `error` is raised.
+          *
+          * @event twilio-element-error
+          * @detail {{error: Object}}
+          */
+
+          /**
+           * The `twilio-element-incoming` event is fired whenever twilio `incoming` is raised.
+           *
+           * @event twilio-element-incoming
+           * @detail {{connection: Object}}
+           */
+
+           /**
+            * The `twilio-element-disconnected` event is fired whenever twilio `disconnected` is raised.
+            *
+            * @event twilio-element-disconnected
+            * @detail {{connection: Object}}
+            */
+      });
+    })();
+  </script>
+
+</dom-module>
